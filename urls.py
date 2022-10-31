@@ -11,5 +11,5 @@ urlpatterns = [
     path('', include(router.urls)),
 
     # Automatically generated views
-    *utils.get_model_urls('riksdagstryck', 'api', exclude=['document']),
+    *utils.get_model_urls('context', 'api', exclude=['document']),
 ]

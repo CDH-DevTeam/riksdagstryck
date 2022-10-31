@@ -1,6 +1,6 @@
 from django.apps import AppConfig
 
 
-class RiksdagstryckConfig(AppConfig):
+class ContextConfig(AppConfig):
     default_auto_field = 'django.db.models.BigAutoField'
-    name = 'apps.riksdagstryck'
+    name = 'apps.context'
