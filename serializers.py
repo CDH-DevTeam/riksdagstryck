@@ -8,15 +8,20 @@ from . import models
 from diana.abstract.models import get_fields
 
 class DocumentSerializer(DynamicFieldsMixin, serializers.ModelSerializer):
-    class Meta:
-        model = models.Document
-        fields = get_fields(models.Document, exclude=DEFAULT_EXCLUDE + ['text_vector'])
 
-class FragmentSerializer(DynamicFieldsMixin, serializers.ModelSerializer):
-
-    headline = serializers.CharField()
+    excerpts = serializers.CharField(default="")
 
     class Meta:
         model = models.Document
-        fields = get_fields(models.Document, exclude=DEFAULT_EXCLUDE + ['text_vector']) + ['headline']
-        depth = 1
+        fields = get_fields(models.Document, exclude=DEFAULT_EXCLUDE + ['text_vector']) + ['excerpts']
+
+
+class SearchCountSerializer(DynamicFieldsMixin, serializers.ModelSerializer):
+
+    results = serializers.IntegerField(default=0)
+    # splits = serializers.ListField(child=serializers.CharField())
+
+    class Meta:
+        model = models.Document
+        fields = ['year', 'results',]
+        # fields = get_fields(models.RiksdagstryckDocument, exclude=DEFAULT_EXCLUDE + ['text_vector']) + ['excerpts']

@@ -2,21 +2,13 @@ from django.db import models
 import diana.abstract.models as abstract
 from django.utils.translation import gettext_lazy as _
 from django.contrib.postgres.indexes import GinIndex # add the Postgres recommended GIN index 
+from django.contrib.contenttypes.fields import GenericRelation, GenericForeignKey
+from django.contrib.contenttypes.models import ContentType
 
-# class TermFrequency(abstract.AbstractBaseModel):
-
-#     year = models.PositiveIntegerField(verbose_name=_("year"))
-#     word = models.CharField(max_length=512, verbose_name=_("word"))
-#     ndoc = models.PositiveIntegerField(verbose_name=_("riksdagstryck.termfrequency.ndoc"))
-#     nentry = models.PositiveIntegerField(verbose_name=_("riksdagstryck.termfrequency.nentry"))   
-
-#     def __str__(self):
-
-#         return f"{self.word}: {self.nentry} entries in {self.ndoc} docs ({self.year})"
         
-class RiksdagstryckDocumentCategory(abstract.AbstractBaseModel):
+class DocumentCategory(abstract.AbstractBaseModel):
 
-    name = abstract.CINameField(max_length=128, primary_key=True, verbose_name=_("name"))
+    name = abstract.CINameField(max_length=128, verbose_name=_("name"), help_text=_("The name of the document as provided by the Swedish Royal Library."))
     abbreviation = abstract.CINameField(max_length=32, verbose_name=_("abbreviation"))
 
     def __str__(self) -> str:
@@ -26,20 +18,11 @@ class RiksdagstryckDocumentCategory(abstract.AbstractBaseModel):
 
         return str(self)
 
-class RiksdagstryckDocument(abstract.AbstractDocumentModel):
-    
-    CHAMBER_CHOICES = (
-        ('fk', _('första kammaren')),
-        ('ak', _('andra kammaren')),
-    )
+class Document(abstract.AbstractDocumentModel):
 
     name        = models.CharField(max_length=128, unique=True, verbose_name=_("name"))
     year        = models.PositiveIntegerField(blank=True, null=True, verbose_name=_("year"))
-    chamber     = models.CharField(max_length=2, choices=CHAMBER_CHOICES, blank=True, null=True, verbose_name=_("riksdagstryck.document.chamber"))
-
-    category    = models.ForeignKey(RiksdagstryckDocumentCategory, on_delete=models.CASCADE, null=True, verbose_name=_("category"))
-
-    nwords     = models.PositiveIntegerField(default=0, verbose_name=_("riksdagstryck.document.nwords"))
+    category    = models.ForeignKey(DocumentCategory, on_delete=models.CASCADE, null=True, verbose_name=_("category"))
 
     def __str__(self) -> str:
         return self.name
