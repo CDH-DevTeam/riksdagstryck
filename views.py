@@ -93,7 +93,7 @@ class DocumentFilter(filters.FilterSet):
     min_year = filters.NumberFilter(field_name="year", lookup_expr='gte')
     max_year = filters.NumberFilter(field_name="year", lookup_expr='lte')
     # cat = filters.CharFilter(field_name="category__abbreviation", lookup_expr='in')
-    cat = filters.CharFilter(field_name="category__abbreviation", lookup_expr='iexact')
+    # cate = filters.CharFilter(field_name="category", lookup_expr='exact')
 
     class Meta:
         model = models.Document
